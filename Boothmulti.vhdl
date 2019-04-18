@@ -1,4 +1,5 @@
 
+
 ------------------------------------Gates package----------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -239,14 +240,20 @@ begin
 	pa4:partial	
 		port map( A => md , B(0)=>sing(3) , B(1)=> doub(3),B(2)=> neg(3),pr  => add3 );
 	n1:nine_bit_adder
-		port map( A => add1 , B(8) => '0' , B(7) => '0' , B(6 downto 0) => add0 , S(1 downto 0)=>pt(3 downto 2),S ( 8 downto 2) => add4 (6 downto 0));
+		port map( A => add1 , B(8) => ( add0(6) and '1') , B(7) => ( add0(6) and '1') , B(6 downto 0) => add0 , S(1 downto 0)=>pt(3 downto 2),S ( 8 downto 2) => add4 (6 downto 0));
 	n2:nine_bit_adder
-		port map( A => add2 , B(8) => '0' , B(7) => '0' , B(6 downto 0) => add4 , S(1 downto 0)=>pt(5 downto 4),S ( 8 downto 2) => add5 (6 downto 0));
+		port map( A => add2 , B(8) => ( add4(6) and '1') , B(7) => ( add4(6) and '1') , B(6 downto 0) => add4 , S(1 downto 0)=>pt(5 downto 4),S ( 8 downto 2) => add5 (6 downto 0));
 	n3:nine_bit_adder
-		port map( A => add3 , B(8) => '0' , B(7) => '0' , B(6 downto 0) => add5 , S =>pt(14 downto 6),C=>pt(15));
-	
+		port map( A => add3 , B(8) => ( add5(6) and '1') , B(7) => ( add5(6) and '1') , B(6 downto 0) => add5 , S =>pt(14 downto 6));
+pt(15) <= (mr(7) or md(7));	
 end booth_multiplication;
 		
+
+
+
+
+
+
 
 
 
