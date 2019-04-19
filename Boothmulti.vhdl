@@ -245,7 +245,7 @@ begin
 		port map( A => add2 , B(8) => ( add4(6) and '1') , B(7) => ( add4(6) and '1') , B(6 downto 0) => add4 , S(1 downto 0)=>pt(5 downto 4),S ( 8 downto 2) => add5 (6 downto 0));
 	n3:nine_bit_adder
 		port map( A => add3 , B(8) => ( add5(6) and '1') , B(7) => ( add5(6) and '1') , B(6 downto 0) => add5 , S =>pt(14 downto 6));
-pt(15) <= (mr(7) or md(7));	
+pt(15) <= (mr(7) xor md(7));	
 end booth_multiplication;
 		
 
