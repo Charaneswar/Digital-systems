@@ -124,29 +124,29 @@ architecture Equations of floatmulti is
 	signal inf,uf,z1: std_logic; 
 	begin
 	
-			mul(4) => '0';
-			mul(3) => y(0);
-			mul(2) => y(0) and x(3) ; 
-			mul(1) => y(0) and x(2) ;
-			mul(0) => y(0) and x(1) ;
+			mul(4) <= '0';
+			mul(3) <= y(0);
+			mul(2) <= y(0) and x(3) ; 
+			mul(1) <= y(0) and x(2) ;
+			mul(0) <= y(0) and x(1) ;
 			
-			mul(9) => y(1) ;
-			mul(8) => y(1) and x(3);
-			mul(7) => y(1) and x(2);
-			mul(6) => y(1) and x(1);
-			mul(5) => y(1) and x(0);
+			mul(9) <= y(1) ;
+			mul(8) <= y(1) and x(3);
+			mul(7) <= y(1) and x(2);
+			mul(6) <= y(1) and x(1);
+			mul(5) <= y(1) and x(0);
 			
-			mul(14) => y(2) ;
-			mul(13) => y(2) and x(3);
-			mul(12) => y(2) and x(2);
-			mul(11) => y(2) and x(1);
-			mul(10) => y(2) and x(0);
+			mul(14) <= y(2) ;
+			mul(13) <= y(2) and x(3);
+			mul(12) <= y(2) and x(2);
+			mul(11) <= y(2) and x(1);
+			mul(10) <= y(2) and x(0);
 			
-			mul(19) => y(3) ;
-			mul(18) => y(3) and x(3);
-			mul(17) => y(3) and x(2);
-			mul(16) => y(3) and x(1);
-			mul(15) => y(3) and x(0);
+			mul(19) <= y(3) ;
+			mul(18) <= y(3) and x(3);
+			mul(17) <= y(3) and x(2);
+			mul(16) <= y(3) and x(1);
+			mul(15) <= y(3) and x(0);
 			
 			
 	   z1 <= x(7) xor y(7) ;
