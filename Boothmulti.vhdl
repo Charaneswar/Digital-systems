@@ -1,5 +1,4 @@
 
-
 ------------------------------------Gates package----------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -13,9 +12,9 @@ package Gates is
 		port ( A,B,Cin : in STD_LOGIC; S,Cout : out STD_LOGIC);
 	end component FULL_ADDER;
 	
-	component mux is
+	component mux1 is
 		port(A,B,S : in STD_LOGIC; Y : out STD_LOGIC);
-	end component mux;
+	end component mux1;
 	
 	end package Gates;
 	
@@ -51,10 +50,10 @@ end Equations;
 
 library ieee;
 use ieee.std_logic_1164.all;
-entity mux is
+entity mux1 is
 	port(A,B,S : in STD_LOGIC; Y : out STD_LOGIC);
-end entity mux;
-architecture Equations of mux is
+end entity mux1;
+architecture Equations of mux1 is
 begin
 	Y <= (A and (not S)) or (B and S);
 end Equations;
@@ -90,11 +89,14 @@ entity booth_encoder is
 end entity booth_encoder;
 
 architecture Equations of booth_encoder is
+	signal a1,b1 : std_logic;
 	begin
+	a1 <= (q1 and q0);
+	b1 <= ((not q1) and (not q0));
 	sing <= q1 xor q0;
 	
-	m:mux
-		port map( A => (q1 and q0), B => ((not q1) and (not q0)), S=>q2 ,Y => doub);
+	m:mux1
+		port map( A => a1, B =>b1 , S=>q2 ,Y => doub);
 	neg <= q2;
 end Equations;
 
@@ -222,6 +224,7 @@ architecture booth_multiplication of Boothmulti is
 signal sing,doub,neg : std_logic_vector(3 downto 0);
 signal add0,add4,add5 : std_logic_vector(6 downto 0);
 signal add1,add2,add3 : std_logic_vector(8 downto 0);
+
 begin
 	e1:booth_encoder
 		port map(q0 => '0' , q1 =>mr(0) ,q2 =>mr(1),sing=>sing(0), doub =>doub(0),neg => neg(0)); 
@@ -240,20 +243,14 @@ begin
 	pa4:partial	
 		port map( A => md , B(0)=>sing(3) , B(1)=> doub(3),B(2)=> neg(3),pr  => add3 );
 	n1:nine_bit_adder
-		port map( A => add1 , B(8) => ( add0(6) and '1') , B(7) => ( add0(6) and '1') , B(6 downto 0) => add0 , S(1 downto 0)=>pt(3 downto 2),S ( 8 downto 2) => add4 (6 downto 0));
+		port map( A => add1 , B(8) => add0(6)  , B(7) =>  add0(6)  , B(6 downto 0) => add0 , S(1 downto 0)=>pt(3 downto 2),S ( 8 downto 2) => add4 (6 downto 0));
 	n2:nine_bit_adder
-		port map( A => add2 , B(8) => ( add4(6) and '1') , B(7) => ( add4(6) and '1') , B(6 downto 0) => add4 , S(1 downto 0)=>pt(5 downto 4),S ( 8 downto 2) => add5 (6 downto 0));
+		port map( A => add2 , B(8) =>  add4(6) , B(7) =>  add4(6) , B(6 downto 0) => add4 , S(1 downto 0)=>pt(5 downto 4),S ( 8 downto 2) => add5 (6 downto 0));
 	n3:nine_bit_adder
-		port map( A => add3 , B(8) => ( add5(6) and '1') , B(7) => ( add5(6) and '1') , B(6 downto 0) => add5 , S =>pt(14 downto 6));
+		port map( A => add3 , B(8) =>  add5(6) , B(7) =>  add5(6) , B(6 downto 0) => add5 , S =>pt(14 downto 6));
 pt(15) <= (mr(7) xor md(7));	
 end booth_multiplication;
 		
-
-
-
-
-
-
 
 
 
