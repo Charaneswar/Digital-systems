@@ -7,7 +7,7 @@ package Gates is
 	end component FULL_ADDER;
 	
 	component mux is
-		port(A,B,C,D,S1,S2 : in STD_LOGIC; Y : out STD_LOGIC);
+		port(A,B,S : in STD_LOGIC; Y : out STD_LOGIC);
 	end component mux;
 	
 	end package Gates;
@@ -26,16 +26,16 @@ begin
    Cout <= (A and B) or ((A or B) and Cin) ;
 end Equations;
 
----------------------------4 to 1-mux------------------------
+---------------------------2 to 1-mux------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
 entity mux is
-	port(A,B,C,D,S1,S2 : in STD_LOGIC; Y : out STD_LOGIC);
+	port(A,B,S : in STD_LOGIC; Y : out STD_LOGIC);
 end entity mux;
 architecture Equations of mux is
 begin
-	Y <= (A and (not S1) and (not S2)) or (B and (not  S2)and S1) or (C and S2 and (not S1)) or (D and S1 and S2);
+	Y <= (A and (not S)) or (B and S);
 end Equations;
 
 
@@ -119,9 +119,11 @@ end floatmulti;
 
 architecture Equations of floatmulti is
 	signal ca,mul: std_logic_vector(19 downto 0);
-	signal pr: std_logic_vector(14 downto 0);
+	signal pr,z1: std_logic_vector(14 downto 0);
 	signal ca1: std_logic_vector(3 downto 0);
-	signal inf,ufa: std_logic; 
+	signal pr1: std_logic_vector(4 downto 0);
+	signal pr2: std_logic_vector(8 downto 0);
+	signal inf,uf: std_logic; 
 	begin
 	
 			mul(4) <= '0';
@@ -149,7 +151,7 @@ architecture Equations of floatmulti is
 			mul(15) <= y(3) and x(0);
 			
 			
-	   z(15) <= x(7) xor y(7) ;
+	  
 		fb1:five_bit_adder
 			port map(
 			A => mul(4 downto 0),
@@ -186,48 +188,80 @@ architecture Equations of floatmulti is
 			B(3 downto 0) => x( 3 downto 0),
 			S( 4 downto 0) => pr(8 downto 4),
 			C => pr(9));
+		fb5:five_bit_adder
+			port map(
+			A => ca( 14 downto 10), 
+			B(4) => '1' ,
+			B(3 downto 0) => x( 3 downto 0),
+			S( 4 downto 0) => pr1(4 downto 0));
 
 		pr(0) <= x(0) and y(0);
+		pr2(8 downto 5) <= pr1(3 downto 0);
+		pr2(4 downto 1) <= pr(3 downto 0);
+		pr2(0) <= '0';
+		m21:mux
+			port map(A =>pr2(0) , B=> pr(0) , S=> pr(9) ,Y => z1(1));
+		m22:mux
+			port map(A =>pr2(1) , B=> pr(1) , S=> pr(9) ,Y => z1(2));
+		m23:mux
+			port map(A =>pr2(2) , B=> pr(2) , S=> pr(9) ,Y => z1(3));
+		m24:mux
+			port map(A =>pr2(3) , B=> pr(3) , S=> pr(9) ,Y => z1(4));
+		m15:mux
+			port map(A =>pr2(4) , B=> pr(4) , S=> pr(9) ,Y => z1(5));
+		m16:mux
+			port map(A =>pr2(5) , B=> pr(5) , S=> pr(9) ,Y => z1(6));
+		m17:mux
+			port map(A =>pr2(6) , B=> pr(6) , S=> pr(9) ,Y => z1(7));
+		m18:mux
+			port map(A =>pr2(7) , B=> pr(7) , S=> pr(9) ,Y => z1(8));
+		m19:mux
+			port map(A =>pr2(8) , B=> pr(8) , S=> pr(9) ,Y => z1(9));
 			
-		
+
 	tb:three_bit_adder
 			port map ( A => x(6 downto 4) ,B => y(6 downto 4) ,S => ca1( 2 downto 0) ,Ci => pr(9), C=>ca1(3));
-	fb5:five_bit_adder
+	fb6:five_bit_adder
 			port map ( A(4)=>'0',A(3 downto 0) => ca1( 3 downto 0), B => "01001" , S => pr(14 downto 10));
 	
-	uf <= (x(6) or x(5) or x(4)) and (y(6) or y(5) or y(4));
+	
+	z1(14 downto 10) <= pr (14 downto 10);
+	
 	inf <= ((not x(6)) or (not x(5)) or (not x(4))) and ((not y(6)) or (not y(5)) or (not y(4)));
 	
 	
+	
 	m1:mux 
-		port map( S2 => uf, S1 => inf, A =>'1', B =>'0', C=> '1' ,D => pr(14),Y => z(14));
+		port map(  S => inf, A =>'1' ,B => z1(14),Y => z(14));
 	m2:mux 
-		port map( S2 => uf, S1 => inf, A =>'1', B =>'0', C=> '1' ,D => pr(13),Y => z(13));
+		port map(  S => inf, A =>'1' ,B => z1(13),Y => z(13));
 	m3:mux 
-		port map( S2 => uf, S1 => inf, A =>'1', B =>'0', C=> '1' ,D => pr(12),Y => z(12));
-	m4:mux 
-		port map( S2 => uf, S1 => inf, A =>'1', B =>'0', C=> '1' ,D => pr(11),Y => z(11));
+		port map(  S => inf, A =>'1' ,B => z1(12),Y => z(12));
+	m4:mux
+		port map(  S => inf, A =>'1',B => z1(11),Y => z(11));
 	m5:mux 
-		port map( S2 => uf, S1 => inf, A =>'1', B =>'0', C=> '1' ,D => pr(10),Y => z(10));
+		port map(  S => inf, A =>'1' ,B => z1(10),Y => z(10));
 	m6:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(8),Y => z(9));
+		port map(  S => inf, A =>'0' ,B => z1(9),Y => z(9));
 	m7:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(7),Y => z(8));
+		port map(  S => inf, A =>'0',B => z1(8),Y => z(8));
 	m8:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(6),Y => z(7));
+		port map(  S => inf,  A =>'0',B => z1(7),Y => z(7));
 	m9:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(5),Y => z(6));
+		port map(  S => inf, A =>'0' ,B => z1(6),Y => z(6));
 	m10:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(4),Y => z(5));
+		port map(  S => inf, A =>'0',B => z1(5),Y => z(5));
 	m11:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(3),Y => z(4));
+		port map(  S => inf, A =>'0' ,B => z1(4),Y => z(4));
 	m12:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(2),Y => z(3));
+		port map( S => inf, A =>'0',B => z1(3),Y => z(3));
 	m13:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(1),Y => z(2));
+		port map( S => inf, A =>'0',B => z1(2),Y => z(2));
 	m14:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(0),Y => z(1));
-	m15:mux 
-		port map( S2 => uf, S1 => inf, A =>'1', B =>'0', C=> '1' ,D => '0',Y => z(0));
+		port map(  S => inf,A =>'0' ,B => z1(1),Y => z(1));
+	
+	z(0) <= '0';
+	
+	z(15) <= x(7) xor y(7) ;
 	
 end Equations;			
