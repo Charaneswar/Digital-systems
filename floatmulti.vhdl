@@ -230,6 +230,6 @@ architecture Equations of floatmulti is
 	m14:mux 
 		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => pr(0),Y => z(1));
 	m15:mux 
-		port map( S2 => uf, S1 => inf, A =>'0', B =>'0', C=> '0' ,D => '0',Y => z(0));
+		port map( S2 => uf, S1 => inf, A =>'1', B =>'0', C=> '1' ,D => '0',Y => z(0));
 	
 end Equations;			
