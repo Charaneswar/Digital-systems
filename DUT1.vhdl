@@ -16,7 +16,7 @@ end entity;
 architecture DutWrap of DUT is
    component Boothmulti is									  -- This is the file you have designed.
      port(mr,md: in std_logic_vector(7 downto 0);
-         	pt: out std_logic_vector(15 downto 0));
+         	pt1: out std_logic_vector(15 downto 0));
    end component;
 begin
 
@@ -26,6 +26,6 @@ begin
 			port map (
 					mr => input_vector(15 downto 8),
 					md => input_vector (7 downto 0),
-					pt => output_vector );
+					pt1 => output_vector );
 end DutWrap;
 
