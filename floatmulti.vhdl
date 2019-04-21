@@ -140,7 +140,7 @@ architecture Equations of floatmulti is
 			mul(13) => y(2) and x(3);
 			mul(12) => y(2) and x(2);
 			mul(11) => y(2) and x(1);
-			B(10) => y(2) and x(0);
+			mul(10) => y(2) and x(0);
 			
 			mul(19) => y(3) ;
 			mul(18) => y(3) and x(3);
