@@ -1,4 +1,4 @@
- library ieee;
+library ieee;
 use ieee.std_logic_1164.all;
 package Gates is	
 
@@ -118,13 +118,13 @@ entity floatmulti is
 end floatmulti;
 
 architecture Equations of floatmulti is
-	signal ca: std_logic_vector(19 downto 0);
+	signal ca,mul: std_logic_vector(19 downto 0);
 	signal pr: std_logic_vector(14 downto 0);
 	signal ca1: std_logic_vector(3 downto 0);
-	signal inf,uf: std_logic; 
+	signal inf,uf,z1: std_logic; 
 	begin
 	
-	   z(15) <= x(7) xor y(7) ;
+	   z1 <= x(7) xor y(7) ;
 		fb1:five_bit_adder
 			port map(
 			A(4) => '0',
@@ -191,6 +191,9 @@ architecture Equations of floatmulti is
 	uf <= (x(6) or x(5) or x(4)) and (y(6) or y(5) or y(4));
 	inf <= ((not x(6)) or (not x(5)) or (not x(4))) and ((not y(6)) or (not y(5)) or (not y(4)));
 	
+	m0:mux 
+		port map( S2 => uf, S1 => inf, A =>z1, B =>'0', C=> z1 ,D => z1,Y => z(15));
+
 	m1:mux 
 		port map( S2 => uf, S1 => inf, A =>'1', B =>'0', C=> '1' ,D => pr(14),Y => z(14));
 	m2:mux 
