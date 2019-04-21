@@ -152,6 +152,8 @@ architecture Equations of floatmulti is
 	   z1 <= x(7) xor y(7) ;
 		fb1:five_bit_adder
 			port map(
+			A => mul(4 downto 0);
+			B => mul(9 downto 5);
 
 			S(0) => pr(1),
 			S( 4 downto 1) => ca(3 downto 0),
@@ -160,7 +162,7 @@ architecture Equations of floatmulti is
 	  fb2:five_bit_adder
 			port map(
 			A => ca( 4 downto 0),
-
+			B => mul(14 downto 10);
 			
 
 			
@@ -171,7 +173,7 @@ architecture Equations of floatmulti is
 	 	fb3:five_bit_adder
 			port map(
 			A => ca( 9 downto 5),
-
+			B => mul(19 downto 15);
 
 			S(0) => pr(3),
 			S( 4 downto 1) => ca(13 downto 10),
