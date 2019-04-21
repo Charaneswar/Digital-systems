@@ -216,14 +216,16 @@ use ieee.std_logic_1164.all;
 library work;
 use work.booth_multiplier.all;
 use work.partial_product.all;
-
+use work.Gates.all;
 entity Boothmulti is
-	port(mr,md : in std_logic_vector(7 downto 0); pt: out std_logic_vector(15 downto 0) );
+	port(mr,md : in std_logic_vector(7 downto 0); pt1: out std_logic_vector(15 downto 0) );
 end Boothmulti;
 architecture booth_multiplication of Boothmulti is
 signal sing,doub,neg : std_logic_vector(3 downto 0);
 signal add0,add4,add5 : std_logic_vector(6 downto 0);
 signal add1,add2,add3 : std_logic_vector(8 downto 0);
+signal m0,m1:std_logic;
+signal pt :std_logic_vector(15 downto 0);
 
 begin
 	e1:booth_encoder
@@ -248,7 +250,12 @@ begin
 		port map( A => add2 , B(8) =>  add4(6) , B(7) =>  add4(6) , B(6 downto 0) => add4 , S(1 downto 0)=>pt(5 downto 4),S ( 8 downto 2) => add5 (6 downto 0));
 	n3:nine_bit_adder
 		port map( A => add3 , B(8) =>  add5(6) , B(7) =>  add5(6) , B(6 downto 0) => add5 , S =>pt(14 downto 6));
-pt(15) <= (mr(7) xor md(7));	
+		m0 <= pt(14) or pt(13) or pt(12) or pt(11) or pt(10) or pt(9) or pt(8) or pt(7) or pt(6) or pt(5) or pt(4) or pt(3) or pt(2) or pt(1) or pt(0) ;
+		m1 <= (mr(7) xor md(7));	
+		mu2:mux1
+			port map( A => '0' ,B => m1 , S =>m0 , Y =>pt(15));
+			
+		pt1 <= pt;
 end booth_multiplication;
 		
 
