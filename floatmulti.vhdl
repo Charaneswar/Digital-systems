@@ -124,21 +124,35 @@ architecture Equations of floatmulti is
 	signal inf,uf,z1: std_logic; 
 	begin
 	
+			mul(4) => '0';
+			mul(3) => y(0);
+			mul(2) => y(0) and x(3) ; 
+			mul(1) => y(0) and x(2) ;
+			mul(0) => y(0) and x(1) ;
+			
+			mul(9) => y(1) ;
+			mul(8) => y(1) and x(3);
+			mul(7) => y(1) and x(2);
+			mul(6) => y(1) and x(1);
+			mul(5) => y(1) and x(0);
+			
+			mul(14) => y(2) ;
+			mul(13) => y(2) and x(3);
+			mul(12) => y(2) and x(2);
+			mul(11) => y(2) and x(1);
+			B(10) => y(2) and x(0);
+			
+			mul(19) => y(3) ;
+			mul(18) => y(3) and x(3);
+			mul(17) => y(3) and x(2);
+			mul(16) => y(3) and x(1);
+			mul(15) => y(3) and x(0);
+			
+			
 	   z1 <= x(7) xor y(7) ;
 		fb1:five_bit_adder
 			port map(
-			A(4) => '0',
-			A(3) => y(0),
-			A(2) => y(0) and x(3) , 
-			A(1) => y(0) and x(2) ,
-			A(0) => y(0) and x(1) ,
-			
-			B(4) => y(1) ,
-			B(3) => y(1) and x(3),
-			B(2) => y(1) and x(2),
-			B(1) => y(1) and x(1),
-			B(0) => y(1) and x(0),
-			
+
 			S(0) => pr(1),
 			S( 4 downto 1) => ca(3 downto 0),
 			C => ca(4));
@@ -148,11 +162,7 @@ architecture Equations of floatmulti is
 			A => ca( 4 downto 0),
 
 			
-			B(4) => y(2) ,
-			B(3) => y(2) and x(3),
-			B(2) => y(2) and x(2),
-			B(1) => y(2) and x(1),
-			B(0) => y(2) and x(0),
+
 			
 			S(0) => pr(2),
 			S( 4 downto 1) => ca(8 downto 5),
@@ -162,12 +172,7 @@ architecture Equations of floatmulti is
 			port map(
 			A => ca( 9 downto 5),
 
-			B(4) => y(3) ,
-			B(3) => y(3) and x(3),
-			B(2) => y(3) and x(2),
-			B(1) => y(3) and x(1),
-			B(0) => y(3) and x(0),
-			
+
 			S(0) => pr(3),
 			S( 4 downto 1) => ca(13 downto 10),
 			C => ca(14));	
