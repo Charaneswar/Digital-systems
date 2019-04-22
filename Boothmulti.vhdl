@@ -233,10 +233,15 @@ signal s:std_logic_vector(7 downto 0);
 
 begin
 
+------------if md1 is 10000000 then shifting the md1 to mr and mr1 to md----------
+
  s <= (others => md1(7) and (not (md1(6) or md1(5) or md1(4) or md1(3) or md1(2) or md1(1) or md1(0)) ));
  
  mr <= ((not s) and mr1 ) or (s and md1);
  md <= ((not s) and md1 ) or (s and mr1);
+ 
+ -----------------------------------------------------------------------
+ 
 	e1:booth_encoder
 		port map(q0 => '0' , q1 =>mr(0) ,q2 =>mr(1),sing=>sing(0), doub =>doub(0),neg => neg(0)); 
 	e2:booth_encoder
@@ -259,12 +264,17 @@ begin
 		port map( A => add2 , B(8) =>  add4(6) , B(7) =>  add4(6) , B(6 downto 0) => add4 , S(1 downto 0)=>pt(5 downto 4),S ( 8 downto 2) => add5 (6 downto 0));
 	n3:nine_bit_adder
 		port map( A => add3 , B(8) =>  add5(6) , B(7) =>  add5(6) , B(6 downto 0) => add5 , S =>pt(14 downto 6));
+	
+	---------------------------if product is zero then sign bit is also made zero using mux----------------
+	
 		m0 <= pt(14) or pt(13) or pt(12) or pt(11) or pt(10) or pt(9) or pt(8) or pt(7) or pt(6) or pt(5) or pt(4) or pt(3) or pt(2) or pt(1) or pt(0) ;
 		m1 <= (mr(7) xor md(7));	
 		mu2:mux1
 			port map( A => '0' ,B => m1 , S =>m0 , Y =>pt(15));
+------------------------------------------------------------------------------------------
 			
 		pt1 <= pt;
+		
 end booth_multiplication;
 		
 
