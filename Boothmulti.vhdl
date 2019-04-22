@@ -168,6 +168,7 @@ entity partial is
 end entity partial;
 architecture Equations of partial is
 signal pr1,ca : std_logic_vector(8 downto 0);
+
 begin
 	d0:booth_decoder
 		port map(sing => B(0)  , y1=> A(0) ,doub=>B(1) , y0=>'0' ,neg=> B(2) , p=>pr1(0) );
@@ -218,7 +219,7 @@ use work.booth_multiplier.all;
 use work.partial_product.all;
 use work.Gates.all;
 entity Boothmulti is
-	port(mr,md : in std_logic_vector(7 downto 0); pt1: out std_logic_vector(15 downto 0) );
+	port(mr1,md1 : in std_logic_vector(7 downto 0); pt1: out std_logic_vector(15 downto 0) );
 end Boothmulti;
 architecture booth_multiplication of Boothmulti is
 signal sing,doub,neg : std_logic_vector(3 downto 0);
@@ -226,8 +227,16 @@ signal add0,add4,add5 : std_logic_vector(6 downto 0);
 signal add1,add2,add3 : std_logic_vector(8 downto 0);
 signal m0,m1:std_logic;
 signal pt :std_logic_vector(15 downto 0);
+signal mr,md :std_logic_vector(7 downto 0);
+signal s:std_logic_vector(7 downto 0);
+
 
 begin
+
+ s <= (others => md1(7) and (not (md1(6) or md1(5) or md1(4) or md1(3) or md1(2) or md1(1) or md1(0)) ));
+ 
+ mr <= ((not s) and mr1 ) or (s and md1);
+ md <= ((not s) and md1 ) or (s and mr1);
 	e1:booth_encoder
 		port map(q0 => '0' , q1 =>mr(0) ,q2 =>mr(1),sing=>sing(0), doub =>doub(0),neg => neg(0)); 
 	e2:booth_encoder
