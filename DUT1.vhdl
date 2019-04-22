@@ -15,7 +15,7 @@ end entity;
 
 architecture DutWrap of DUT is
    component Boothmulti is									  -- This is the file you have designed.
-     port(mr,md: in std_logic_vector(7 downto 0);
+     port(mr1,md1: in std_logic_vector(7 downto 0);
          	pt1: out std_logic_vector(15 downto 0));
    end component;
 begin
@@ -24,8 +24,8 @@ begin
    -- and must match the ordering in the trace file!
    add_instance:Boothmulti
 			port map (
-					mr => input_vector(15 downto 8),
-					md => input_vector (7 downto 0),
+					md1 => input_vector(15 downto 8),
+					mr1 => input_vector (7 downto 0),
 					pt1 => output_vector );
 end DutWrap;
 
