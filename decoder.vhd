@@ -113,10 +113,10 @@ architecture behavioral of decoder is
 -------------------------------------Stage 3----------------------------------            
             
             elsif(PreS = "10100") then
-					enablepins <= "0-00-0-----0--001010000-011";
-					if(IR1 ="0000") then
-						NextS <= "01001";
-					end if;
+		enablepins <= "0-00-0-----0--001010000-011";
+		if(IR1 ="0000") then
+			NextS <= "01001";
+		end if;
                             
             
             
