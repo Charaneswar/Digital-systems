@@ -6,12 +6,12 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_arith.all;	 
 use ieee.std_logic_unsigned.all;
-package Mem 
-component Mem is 
-	port (address,Mem_datain: in std_logic_vector(15 downto 0); Mem_wr,Mem_re: in std_logic;
+package zxcv is
+component Mem_synced is 
+	port (re_ad,wr_ad,Mem_datain: in std_logic_vector(15 downto 0); Mem_wr,Mem_re: in std_logic;
 				Mem_dataout: out std_logic_vector(15 downto 0));
-end component Mem;
-end package Mem;
+end component Mem_synced;
+end package zxcv;
 
 -------------------------------Memory-----------------------------------------------
 
@@ -25,20 +25,20 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 
-entity Mem is 
+entity Mem_synced is 
 	port (re_ad,wr_ad,Mem_datain: in std_logic_vector(15 downto 0); Mem_wr,Mem_re: in std_logic;
 				Mem_dataout: out std_logic_vector(15 downto 0));
-end entity Mem;
+end entity Mem_synced;
 
-architecture Form of Mem is 
+architecture Form of Mem_synced is 
 type regarray is array(65535 downto 0) of std_logic_vector(15 downto 0);   -- defining a new type
 signal Memory: regarray:=(
-1 => x"3000",2 => x"1057",3 => x"4442",4 => x"0458",5 => x"2460",6 => x"2921",7 => x"0000",8 => x"2921",9 => x"58c0",10 => x"7292",11 => x"6e60",12 => x"c040",13 => x"127f",14 => x"c241",16 => x"9440",22 => x"83f5",25 => x"ffed",others => "0000000000000000");
+0=> x"3000" ,1 => x"3000",2 => x"1057",3 => x"4442",4 => x"0458",5 => x"2460",6 => x"2921",7 => x"0000",8 => x"2921",9 => x"58c0",10 => x"7292",11 => x"6e60",12 => x"c040",13 => x"127f",14 => x"c241",16 => x"9440",22 => x"83f5",25 => x"ffed",others => "0000000000000000");
 
 begin
 
 Mem_read:
-process (Mem_re,Mem_dataout,re_ad)
+process (Mem_re,re_ad)
 	begin
 	if(Mem_re = '1') then
 		Mem_dataout <= Memory(conv_integer(re_ad));
