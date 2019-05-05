@@ -1,9 +1,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
 library work;
-use work.reg.all;
+use work.reg1.all;
 
-package inst_reg
+package inst_reg1 is
 component inst_reg is 
    port(RA,RB,RC:out std_logic_vector(2 downto 0); 
 			Clk :in std_logic; 
@@ -14,14 +14,14 @@ component inst_reg is
 			imm9_s:out std_logic_vector(15 downto 0);
 			imm6:out std_logic_vector(15 downto 0));
 end component inst_reg;
-end package inst_reg;
+end package inst_reg1;
 
 ---------------------------------instruction register------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
 library work;
-use work.reg.all;
+use work.reg1.all;
 entity inst_reg is 
    port(RA,RB,RC:out std_logic_vector(2 downto 0); 
 			Clk :in std_logic; 
@@ -34,7 +34,7 @@ entity inst_reg is
 end entity inst_reg;
 
 architecture Equations of inst_reg is 
-signal q1:out std_logic_vector(15 downto 0);
+signal q1:std_logic_vector(15 downto 0);
  begin
 	r1:reg
 		port map(D =>A, Clk => Clk ,Q => q1);
