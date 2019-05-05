@@ -14,6 +14,10 @@ package mux is
 		port ( A,B : in STD_LOGIC_VECTOR(15 downto 0);s: in std_logic; Y : out STD_LOGIC_VECTOR(15 downto 0));
 	end component sixteen_bit_2;
 	
+	component three_bit_2 is
+		port ( A,B : in STD_LOGIC_VECTOR(2 downto 0);s: in std_logic; Y : out STD_LOGIC_VECTOR(2 downto 0));
+	end component three_bit_2;
+	
 end package mux;
 
 -------------------------------------16 bit 4 to 1 ---------------------------------
@@ -68,9 +72,22 @@ use ieee.std_logic_1164.all;
 	Y <= ((not sig) and  A) or (sig and B) ;
 	end Equations;
 	
-------------------------------------------------------------------------------------	
+--------------------------------------3 bit 2 to 1----------------------------------------------	
 	
+library ieee;
+use ieee.std_logic_1164.all;
+
 	
+	entity three_bit_2 is
+		port ( A,B : in STD_LOGIC_VECTOR(2 downto 0);s: in std_logic; Y : out STD_LOGIC_VECTOR(2 downto 0));
+	end entity three_bit_2;
+	
+	architecture Equations of three_bit_2 is
+	signal sig:STD_LOGIC_VECTOR(2 downto 0);
+	begin
+	sig <= (others => s);
+	Y <= ((not sig) and  A) or (sig and B) ;
+	end Equations;
 	
 	
 	
