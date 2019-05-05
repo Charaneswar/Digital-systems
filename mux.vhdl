@@ -52,7 +52,7 @@ use ieee.std_logic_1164.all;
 	sig1 <= (others => s1);
 	sig2 <= (others => s2);
 	
-	Y <= ((not sig1) and (not sig2 ) and A) or (not sig2 and sig1 and B) or (sig2 and not sig1 and C) or (sig1 and sig2 and D);
+	Y <= ((not sig1) and (not sig2 ) and A) or ((not sig2) and sig1 and B) or (sig2 and (not sig1) and C) or (sig1 and sig2 and D);
 	end Equations;
 
 ---------------------------------------16 bit 2 to 1---------------------------------	
