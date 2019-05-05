@@ -150,9 +150,25 @@ library ieee;
 use ieee.std_logic_1164.all;
 library work;
 use work.alu_components.all;
+use work.mux.all;
+package ALU1 is
+	component ALU is
+		port(A,B :in std_logic_vector(15 downto 0);
+				S1,s2 :in std_logic;
+				Y1:out std_logic_vector(15 downto 0);
+				C_flag,Z_flag:out std_logic);
+	end component ALU;
+end package ALU1;
+
+
+library ieee;
+use ieee.std_logic_1164.all;
+library work;
+use work.alu_components.all;
+use work.mux.all;
 entity ALU is
 	port(A,B :in std_logic_vector(15 downto 0);
-			Sel :in std_logic_vector(1 downto 0);
+			S1,s2 :in std_logic;
 			Y1:out std_logic_vector(15 downto 0);
 			C_flag,Z_flag:out std_logic);
 end entity ALU;
@@ -160,9 +176,11 @@ end entity ALU;
 architecture Equations of ALU is
 
 	signal Cout,zf1,zf2,zf3,zf4:std_logic;
-	signal sel1,sel0,ad,n,x,Y:std_logic_vector(15 downto 0);
+	signal zero,ad,n,x,Y:std_logic_vector(15 downto 0);
 	
 begin
+	
+	zero <= (others =>'0');
 	
 	add1:sixteen_bit_adder
 		port map( A => A,B => B, S=> ad,C=>Cout);
@@ -170,11 +188,8 @@ begin
 		port map(A=> A,B=>B,S=>n);
 	xor1:sixteen_bit_xor
 		port map(A=> A,B=>B,S=>x);
-	
-	sel0	<= (others => Sel(0));
-	sel1	<= (others => Sel(1));
-
-	Y <= ((not sel0) and (not sel1) and ad) or ( (not sel1 )and  sel0 and n ) or (sel1 and (not sel0) and  x );
+	mux1:sixteen_bit_4
+		port map( s1 => s1, s2 => s2 ,A => ad,B => n, C => x ,D =>zero,Y=>Y);
 	
 	zf3 <= (A(1) xnor B(1)) or (A(2) xnor B(2)) or (A(3) xnor B(3)) or (A(4) xnor B(4)) or (A(5) xnor B(5)) or (A(6) xnor B(6)) or (A(7) xnor B(7)) or (A(8) xnor B(8)) or (A(9) xnor B(9)) or (A(10) xnor B(10)) or (A(11) xnor B(11)) or (A(12) xnor B(12)) or (A(13) xnor B(13)) or (A(14) xnor B(14)) or (A(15) xnor B(15)) ;
 	zf4<=  A(0) xnor B(0);
@@ -182,8 +197,8 @@ begin
 	Zf1 <= zf4 and (not zf3);
 	zf2 <= not (Y(0) or Y(1) or Y(2) or Y(3) or Y(4) or Y(5) or Y(6) or Y(7) or Y(8) or Y(9) or Y(10) or Y(11) or Y(12) or Y(13) or Y(14) or Y(15));	
 	 
-	C_flag <= (not sel(0)) and (not sel(1)) and (Cout and (not zf1));
-	Z_flag <= ((not sel(0)) and (not sel(1)) and zf1 )or (( sel(1) xor sel(0)) and zf2);
+	C_flag <= (not s1) and (not s2) and (Cout and (not zf1));
+	Z_flag <= ((not s1) and (not s2) and zf1 )or (( s1 xor s2) and zf2);
 	
 	Y1 <= Y;
 end Equations;
